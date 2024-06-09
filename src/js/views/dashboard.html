@@ -1,0 +1,104 @@
+<!--
+ Copyright (c) 2014, 2024, Oracle and/or its affiliates.
+ Licensed under The Universal Permissive License (UPL), Version 1.0
+ as shown at https://oss.oracle.com/licenses/upl/
+ -->
+<div class="oj-hybrid-padding">
+  <h1>Product Information</h1>
+  <div id="parentContainer1" class="oj-flex oj-flex-init oj-panel oj-bg-info-20">
+    <!-----------------Activities Container have the master view------------------------------
+      -activityDataProvider => Holds main data (sports :baseball, cycling, etc..)
+    ----------------------------------------------------------------------------------------->
+    <div id="activitiesContainer" class="oj-flex-item oj-md-4 oj-sm-12">
+      <h3 id="activitiesHeader">Activities</h3>
+      <oj-list-view id="activitiesList" aria-labelledby="activitiesHeader" class="item-display"
+        data="[[activityDataProvider]]" gridlines.item="visible" selection-mode="single" selected="{{selectedActivity}}"
+        on-first-selected-item-changed="[[selectedActivityChanged]]" first-selected-item="{{firstSelectedActivity}}"
+        scroll-policy="loadMoreOnScroll" scroll-policy-options.fetch-size="5">
+        <template slot="itemTemplate">
+          <div class="oj-flex no-wrap">
+            <span class="demo-thumbnail oj-flex-item"
+              :style.background-image="[[' url('+$current.data.image+')']]"></span>
+            <div class="demo-content oj-flex-item">
+              <div>
+                <Strong>
+                  <oj-bind-text value="[[$current.data.name]]"></oj-bind-text>
+                </Strong>
+              </div>
+            </div>
+            <span class="demo-metadata">
+              <oj-bind-text value="[[$current.data.short_desc]]"></oj-bind-text>
+            </span>
+          </div>
+        </template>
+      </oj-list-view>
+    </div>
+    <oj-bind-if test="[[activitySelected]]">
+      <div id="parentContainer2"
+        class="oj-flex oj-flex-item oj-panel oj-bg-danger-30  oj-lg-padding-6x oj-md-8 oj-sm-12">
+        <div id="activityItemsContainer" class="oj-flex-item  oj-panel oj-bg-success-30  oj-md-6 oj-sm-12">
+          <h3 id="itemsListHeader">Activity Items</h3>
+          <oj-list-view id="itemList" class="item-display" data="[[itemsDataProvider]]"
+            aria-labelledby="itemsListHeader" gridlines.item="visible" selection-mode="single"
+            selected="{{selectedItem}}" on-first-selected-item-changed="[[selectedItemChanged]]"
+            first-selected-item="{{firstSelectedItem}}" scroll-policy="loadMoreOnScroll"
+            scroll-policy-options.fetch-size="5">
+            <template slot="itemTemplate">
+              <div class="oj-flex no-wrap">
+                <span class="demo-thumbnail oj-flex-item" :style.background-image="[[' url('+$current.data.image+')']]">
+                </span>
+                <div class="demo-content oj-flex-item">
+                  <div>
+                    <strong>
+                      <oj-bind-text value="[[$current.data.name]]"></oj-bind-text>
+                    </strong>
+                  </div>
+                </div>
+              </div>
+            </template>
+          </oj-list-view>
+        </div>
+        <oj-bind-if test="[[itemSelected]]">
+          <div id="itemDetailsContainer" class="oj-flex-item   oj-panel oj-bg-neutral-30 oj-md-6 oj-sm-12">
+            <h3>Item Details</h3>
+            <hr class="hr-margin">
+            <oj-avatar role="img" size="lg" :aria-label="[['product image for'+itemData().name]]"
+              src="[[itemData().image]]" class="float-right">
+
+            </oj-avatar>
+            <div id="itemName" class="data-name">
+              <oj-bind-text value="[[itemData().name]]"></oj-bind-text>
+            </div>
+
+            <div id="itemDesc" class="data-name">
+              <oj-bind-text value="[[itemData().short_desc]]"></oj-bind-text>
+            </div>
+
+            <div id="itemPrice" class="data-name">
+              <oj-bind-text value="[['Price: ' + itemData().price+' each']]"></oj-bind-text>
+            </div>
+
+            <div id="itemId" class="data-name">
+              <oj-bind-text value="[['Item Id: ' + itemData().id]]"></oj-bind-text>
+            </div>
+            <div class="">
+              <oj-chart type="pie" series="[[pieSeriesValue]]" animation-on-data-change="auto"
+                animation-on-display="auto" hover-behavior="dim" legend.position="bottom" class="chartStyle"></oj-chart>
+            </div>
+          </div>
+        </oj-bind-if>
+        <oj-bind-if test="[[!itemSelected]]">
+          <div class="oj-flex-item oj-sm-12 oj-md-6">
+            <p>Select an Item to see details</p>
+          </div>
+        </oj-bind-if>
+      </div>
+    </oj-bind-if>
+    <oj-bind-if test="[[!activitySelected]]">
+      <div class="oj-flex-item oj-sm-6">
+        <p>Select an Activity to see Items</p>
+      </div>
+    </oj-bind-if>
+  </div>
+
+</div>

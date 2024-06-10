@@ -101,3 +101,16 @@ html[dir="rtl"] .demo-oracle-icon {
 .float-right {
   float: right;
 }
+
+.no-display {
+  display: none;
+}
+   
+.slot-line {
+  line-height: 2.4em;
+}
+   
+.text-width {
+  width: 100%;
+  min-width: 100%;
+}

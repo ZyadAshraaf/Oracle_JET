@@ -58,8 +58,8 @@ define([
     selectedItem = ko.observable();
     firstSelectedItem = ko.observable();
     inputImageFile = "css/images/product_images/jet_logo_256.png";
-    
-   selectedRow = ko.observable();
+
+    selectedRow = ko.observable();
     constructor() {
       this.activityDataProvider = new RESTDataProvider({
         keyAttributes: this.keyAttributes,
@@ -95,7 +95,7 @@ define([
       this.quantity_instock = ko.observable(null);
       this.quantity_shipped = ko.observable(null);
       this.quantity = 0;
-      
+
       this.inputItemID = ko.observable(null);
       this.inputItemName = ko.observable(null);
       this.inputPrice = ko.observable(null);
@@ -154,56 +154,63 @@ define([
 
     updateItemSubmit = async (event) => {
       const currentRow = this.selectedRow;
-      if(currentRow != null){
+      if (currentRow != null) {
         const row = {
           itemId: this.itemData().id,
           name: this.inputItemName(),
           price: this.inputPrice(),
           short_desc: this.inputShortDesc()
         }
-        const request = new Request(`${this.restServerURLItems}${this.itemData().id}`,{
-          headers : new Headers({
+        const request = new Request(`${this.restServerURLItems}${this.itemData().id}`, {
+          headers: new Headers({
             "Content-type": "application/json; charset=UTF-8"
           }),
-          body :JSON.stringify(row),
-          method:"PUT"
+          body: JSON.stringify(row),
+          method: "PUT"
         });
         const respone = await fetch(request);
         const updatedRow = await respone.json();
 
         const updatedRowKey = this.itemData().id;
-        const updatedRowMeteData = {key:updatedRowKey};
+        const updatedRowMeteData = { key: updatedRowKey };
         this.itemsDataProvider.mutate({
-          update :{
-            data : [updatedRow],
-            keys : new Set([updatedRowKey]),
-            metadata : [updatedRowMeteData]
+          update: {
+            data: [updatedRow],
+            keys: new Set([updatedRowKey]),
+            metadata: [updatedRowMeteData]
           }
         });
         this.itemsDataProvider.refresh();
       }
       document.getElementById("editDialog").close();
-      
+
     }
 
 
-    deleteItem = async(event)=>{
-      const deleteItemId = this.itemSelected().id;
-      const request = new Request(`${this.restServerURLItems}${this.itemData().id}`,{
-        method:"DELETE"
-      });
-      
-      const respone = await fetch(request);
-      const deletedRowKey = this.itemData().id;
-      const deletedRowMeteData = {key:deletedRowKey};
-      this.itemsDataProvider.mutate({
-        delete :{
-          keys : new Set([deletedRowKey]),
-          metadata : [deletedRowMeteData]
+    deleteItem = async (event) => {
+      let really = confirm("Are you sure you want to delete this item?");
+      if (really) {
+        const deleteItemId = this.itemSelected().id;
+        const request = new Request(`${this.restServerURLItems}${this.itemData().id}`, {
+          method: "DELETE"
+        });
+
+        const response = await fetch(request);
+
+        if (response.status === 200) {
+          const deletedRowKey = deleteItemId;
+          const deletedRowMeteData = { key: deletedRowKey };
+          this.itemsDataProvider.mutate({
+            delete: {
+              data: [deleteItemId],
+              keys: new Set([deletedRowKey]),
+              metadata: [deletedRowMeteData]
+            }
+          });
+          this.itemsDataProvider.refresh();
         }
-      });
-      this.itemsDataProvider.refresh();
-      
+      }
+
     }
     selectedActivityChanged = (event) => {
 
